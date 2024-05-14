@@ -10,9 +10,9 @@ function Create(props) {
         const body = event.target.body.value;
         props.onCreate(title, body);
       }}>
-        <p><input type="text" name="title" placeholder="title"></input></p>
-        <p><textarea name="body" placeholder="body"></textarea></p>
-        <p><input type="submit" value="Create"></input></p>
+        <p><input className="text-input" type="text" name="title" placeholder="title"></input></p>
+        <p><textarea className="text-input" name="body" placeholder="body"></textarea></p>
+        <p><input className="button" type="submit" value="Create"></input></p>
       </form>
     </article>
   )

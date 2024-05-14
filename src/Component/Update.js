@@ -12,13 +12,13 @@ function Update(props) {
         const body = event.target.body.value;
         props.onUpdate(title, body);
       }}>
-        <p><input type="text" name="title" placeholder="title" value={title} onChange={(event)=> {
+        <p><input className="text-input" type="text" name="title" placeholder="title" value={title} onChange={(event)=> {
           setTitle(event.target.value);
         }}></input></p>
-        <p><textarea name="body" placeholder="body" value={body} onChange={(event) => {
+        <p><textarea className="text-input" name="body" placeholder="body" value={body} onChange={(event) => {
           setBody(event.target.value);
         }}></textarea></p>
-        <p><input type="submit" value="Update"></input></p>
+        <p><input className="button" type="submit" value="Update"></input></p>
       </form>
     </article>
   )

@@ -34,7 +34,7 @@ function App() {
         event.preventDefault();
         setMode('UPDATE');
       }}>Update</a></li>
-      <li><input type="button" value="Delete" onClick={()=>{
+      <li><input className="button" type="button" value="Delete" onClick={()=>{
         const newTopics = [];
         for(let i=0; i<topics.length; i++) {
           if (topics[i].id !== id) {
