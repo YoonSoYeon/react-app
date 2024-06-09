@@ -5,9 +5,9 @@ import Article from './Component/Article';
 import Create from './Component/Create';
 import Update from './Component/Update';
 import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
-  const [mode, setMode] = useState("WELCOME");
   const [id, setId] = useState(null);
   const [nextId, setNextId] = useState(4);
   const [topics, setTopics] = useState([
@@ -15,85 +15,20 @@ function App() {
     {id: 2, title: "css", body:"css is ..."},
     {id: 3, title: "javascript", body:"javascript is ..."}
   ]);
-  let content = null;
-  let contextControl = null;
 
-  if(mode === "WELCOME") {
-    content = <Article title="Welcome" body="Hello, WEB"></Article>;
-  } else if (mode === "READ") {
-    let title,body = null;
-    for(let i=0; i<topics.length; i++) {
-      if (topics[i].id === id) {
-        title = topics[i].title;
-        body = topics[i].body;
-      }
-    }
-    content = <Article title={title} body={body}></Article>;
-    contextControl =  <>
-      <li><a href={"/update"+id} onClick={(event)=> {
-        event.preventDefault();
-        setMode('UPDATE');
-      }}>Update</a></li>
-      <li><input className="button" type="button" value="Delete" onClick={()=>{
-        const newTopics = [];
-        for(let i=0; i<topics.length; i++) {
-          if (topics[i].id !== id) {
-            newTopics.push(topics[i]);
-          }
-        }
-        setTopics(newTopics);
-        setMode("WELCOME");
-      }}></input></li>
-    </>
-  } else if (mode === "CREATE") {
-    content = <Create onCreate={(_title,_body)=>{
-      const newTopic = {id:nextId, title:_title, body:_body};
-      const newTopics = [...topics];
-      newTopics.push(newTopic);
-      setTopics(newTopics);
-      setMode("READ");
-      setId(nextId);
-      setNextId(nextId+1);
-    }}></Create>;
-  } else if (mode === "UPDATE") {
-    let title,body = null;
-    for(let i=0; i<topics.length; i++) {
-      if (topics[i].id === id) {
-        title = topics[i].title;
-        body = topics[i].body;
-      }
-    }
-    content = <Update title={title} body={body} onUpdate={(_title, _body) => {
-      const newTopics = [...topics];
-      const updatedTopic = {id:id, title:_title, body:_body};
-
-      for(let i=0; i<newTopics.length; i++) {
-        if (newTopics[i].id === id) {
-          newTopics[i] = updatedTopic;
-          break;
-        }
-      }
-      setTopics(newTopics);
-      setMode("READ");
-    }}></Update>;
-  }
   return (
-    <div>
-      <Header title="WEB" onChangeMode={()=>{
-        setMode('WELCOME');
-      }}></Header>
-      <Nav topics={topics} onChangeMode={(_id)=> {
-        setMode('READ');
-        setId(_id);
-      }}></Nav>
-      {content}
-      <ul>
-        <li><a href="/create" onClick={(event)=> {
-          event.preventDefault();
-          setMode('CREATE');
-        }}>Create</a></li>
-        {contextControl}
-      </ul>
+    <div className="App">
+      <BrowserRouter>
+        <Header title="WEB"/>
+        <Nav topics={topics}></Nav>
+        <Routes>
+          <Route path="/" element={<Article/>}></Route>
+          <Route path="/read/*" element={<Article topics={topics} setTopics={setTopics}/>}></Route>
+          <Route path="/create" element={<Create nextId={nextId} topics={topics} setId={setId} setNextId={setNextId} setTopics={setTopics}/>}></Route>
+          <Route path="/update/*" element={<Update topics={topics} setTopics={setTopics}/>}></Route>
+          <Route path="*" element={<Article/>}></Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }

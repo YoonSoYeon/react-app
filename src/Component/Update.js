@@ -1,17 +1,34 @@
 import React, {useState} from "react";
+import {useLocation, useNavigate} from 'react-router-dom';
 
 function Update(props) {
-  const [title, setTitle] = useState(props.title);
-  const [body, setBody] = useState(props.body);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const id = location.state?.id;
+  const [title, setTitle] = useState(location.state?.title);
+  const [body, setBody] = useState(location.state?.body);
+
+  const onUpdate = (event) => {
+    event.preventDefault();
+
+    const newTopics = [...props.topics];
+    const updatedTopic = {id:id, title:title, body:body};
+
+    for(let i=0; i<newTopics.length; i++) {
+      if (newTopics[i].id === id) {
+        newTopics[i] = updatedTopic;
+        break;
+      }
+    }
+
+    props.setTopics(newTopics);
+    navigate('/');
+  }
   return(
     <article>
       <h2>Update</h2>
-      <form onSubmit={(event)=> {
-        event.preventDefault();
-        const title = event.target.title.value;
-        const body = event.target.body.value;
-        props.onUpdate(title, body);
-      }}>
+      <form onSubmit={onUpdate}>
         <p><input className="text-input" type="text" name="title" placeholder="title" value={title} onChange={(event)=> {
           setTitle(event.target.value);
         }}></input></p>

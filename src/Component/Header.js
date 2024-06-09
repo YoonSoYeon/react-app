@@ -1,13 +1,15 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 function Header(props) {
   return (
-    <header>
-      <h1><a href="/" onClick={(event)=> {
-        event.preventDefault();
-        props.onChangeMode();
-      }}>{props.title}</a></h1>
-    </header>
+    <>
+      <header>
+        <Link to='/'>
+          <h1>{props.title}</h1>
+        </Link>
+      </header>
+    </>
   );
 }
 
